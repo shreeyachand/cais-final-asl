@@ -32,9 +32,9 @@ def predict(hand_roi):
         img_tensor = transform(hand_roi).unsqueeze(0)
         with torch.no_grad():
             outputs = model(img_tensor)
-            probabilities = F.softmax(outputs, dim=1)
-            confidence, predicted = torch.max(probabilities, 1)
-        return classes[predicted.item()], confidence.item()
+            confidence = float(torch.max(outputs))
+            predicted = int(torch.argmax(outputs))
+        return classes[predicted], confidence
     except Exception as e:
         print(f"Error during prediction: {e}")
         return None, None
